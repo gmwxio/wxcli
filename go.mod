@@ -1,4 +1,4 @@
-module github.com/jpillora/opts
+module github.com/wxio/wxcli
 
 go 1.12
 

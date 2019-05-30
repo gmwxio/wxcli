@@ -2,11 +2,11 @@ package main
 
 import (
 	"github.com/golang/glog"
-	"github.com/jpillora/opts"
+	"github.com/wxio/wxcli"
 )
 
 func main() {
-	opts.New(&app{}).
+	wxcli.New(&app{}).
 		EmbedGlobalFlagSet().
 		Complete().
 		SetLineWidth(90).

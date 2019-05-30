@@ -1,4 +1,4 @@
-package opts
+package wxcli
 
 import (
 	"flag"
@@ -33,7 +33,7 @@ type node struct {
 	padAll                         bool
 	padWidth                       int
 	//pretend these are in the user struct :)
-	internalOpts struct {
+	internalWXCli struct {
 		Help       bool
 		Version    bool
 		Install    bool

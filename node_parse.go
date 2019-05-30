@@ -1,4 +1,4 @@
-package opts
+package wxcli
 
 import (
 	"encoding/json"
@@ -14,12 +14,12 @@ import (
 )
 
 //Parse with os.Args
-func (n *node) Parse() ParsedOpts {
+func (n *node) Parse() ParsedWXCli {
 	return n.ParseArgs(os.Args)
 }
 
 //ParseArgs with the provided arguments
-func (n *node) ParseArgs(args []string) ParsedOpts {
+func (n *node) ParseArgs(args []string) ParsedWXCli {
 	//shell-completion?
 	if cl := os.Getenv("COMP_LINE"); n.complete && cl != "" {
 		args := strings.Split(cl, " ")
@@ -38,7 +38,7 @@ func (n *node) ParseArgs(args []string) ParsedOpts {
 		}
 		//unexpected exit (1) print message to programmer
 		if ae, ok := err.(authorError); ok {
-			fmt.Fprintf(os.Stderr, "opts usage error: %s\n", ae)
+			fmt.Fprintf(os.Stderr, "wxcli usage error: %s\n", ae)
 			os.Exit(1)
 		}
 		//unexpected exit (1) embed message in help to user
@@ -115,16 +115,16 @@ func (n *node) parse(args []string) error {
 	if err := flagset.Parse(args); err != nil {
 		//insert flag errors into help text
 		n.err = err
-		n.internalOpts.Help = true
+		n.internalWXCli.Help = true
 	}
 	//handle help, version, install/uninstall
-	if n.internalOpts.Help {
+	if n.internalWXCli.Help {
 		return exitError(n.Help())
-	} else if n.internalOpts.Version {
+	} else if n.internalWXCli.Version {
 		return exitError(n.version)
-	} else if n.internalOpts.Install {
+	} else if n.internalWXCli.Install {
 		return n.manageCompletion(false)
-	} else if n.internalOpts.Uninstall {
+	} else if n.internalWXCli.Uninstall {
 		return n.manageCompletion(true)
 	}
 	//first round of defaults, applying env variables where necesseary
@@ -143,7 +143,7 @@ func (n *node) parse(args []string) error {
 		}
 	}
 	//second round, unmarshal directly into the struct, overwrites envs and flags
-	if c := n.internalOpts.ConfigPath; c != "" {
+	if c := n.internalWXCli.ConfigPath; c != "" {
 		b, err := ioutil.ReadFile(c)
 		if err == nil {
 			v := n.val.Addr().Interface() //*struct
@@ -212,7 +212,7 @@ func (n *node) parse(args []string) error {
 
 func (n *node) addStructFields(group string, sv reflect.Value) error {
 	if sv.Kind() != reflect.Struct {
-		return n.errorf("opts: %s should be a pointer to a struct (got %s)", sv.Type().Name(), sv.Kind())
+		return n.errorf("wxcli: %s should be a pointer to a struct (got %s)", sv.Type().Name(), sv.Kind())
 	}
 	for i := 0; i < sv.NumField(); i++ {
 		sf := sv.Type().Field(i)
@@ -225,7 +225,7 @@ func (n *node) addStructFields(group string, sv reflect.Value) error {
 }
 
 func (n *node) addStructField(group string, sf reflect.StructField, val reflect.Value) error {
-	kv := newKV(sf.Tag.Get("opts"))
+	kv := newKV(sf.Tag.Get("wxcli"))
 	help := sf.Tag.Get("help")
 	mode := sf.Tag.Get("type") //legacy versions of this package used "type"
 	if m := sf.Tag.Get("mode"); m != "" {
@@ -235,7 +235,7 @@ func (n *node) addStructField(group string, sf reflect.StructField, val reflect.
 		return err
 	}
 	if ks := kv.keys(); len(ks) > 0 {
-		return fmt.Errorf("unused opts keys: %s", strings.Join(ks, ", "))
+		return fmt.Errorf("unused wxcli keys: %s", strings.Join(ks, ", "))
 	}
 	return nil
 }
@@ -246,7 +246,7 @@ func (n *node) addKVField(kv *kv, fName, help, mode, group string, val reflect.V
 		return nil
 	}
 	//parse key-values
-	//ignore `opts:"-"`
+	//ignore `wxcli:"-"`
 	if _, ok := kv.take("-"); ok {
 		return nil
 	}
@@ -265,7 +265,7 @@ func (n *node) addKVField(kv *kv, fName, help, mode, group string, val reflect.V
 	if t, ok := kv.take("mode"); ok {
 		mode = t
 	}
-	//default opts mode from go type
+	//default wxcli mode from go type
 	if mode == "" {
 		switch val.Type().Kind() {
 		case reflect.Struct:
@@ -384,7 +384,7 @@ func (n *node) addKVField(kv *kv, fName, help, mode, group string, val reflect.V
 		//add to this command's arguments
 		n.args = append(n.args, i)
 	default:
-		return fmt.Errorf("invalid opts mode '%s'", mode)
+		return fmt.Errorf("invalid wxcli mode '%s'", mode)
 	}
 	return nil
 }
@@ -430,7 +430,7 @@ func (n *node) addInlineCmd(name, help string, val reflect.Value) error {
 
 func (n *node) addInternalFlags() error {
 	type internal struct{ name, help, group string }
-	g := reflect.ValueOf(&n.internalOpts).Elem()
+	g := reflect.ValueOf(&n.internalWXCli).Elem()
 	flags := []internal{}
 	if n.version != "" {
 		flags = append(flags,

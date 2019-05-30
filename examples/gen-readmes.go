@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/jpillora/md-tmpl/mdtmpl"
-	"github.com/jpillora/opts"
+	"github.com/wxio/wxcli"
 )
 
 func main() {
@@ -21,7 +21,7 @@ func main() {
 		Directory: ".",
 		Filter:    "",
 	}
-	opts.Parse(&c)
+	wxcli.Parse(&c)
 	egs, err := ioutil.ReadDir(c.Directory)
 	check(err)
 	for _, s := range egs {

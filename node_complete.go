@@ -1,4 +1,4 @@
-package opts
+package wxcli
 
 import (
 	"fmt"
@@ -27,7 +27,7 @@ type Completer interface {
 
 //Complete enables shell-completion for this command and
 //its subcommands
-func (n *node) Complete() Opts {
+func (n *node) Complete() WXCli {
 	n.complete = true
 	return n
 }
@@ -136,7 +136,7 @@ func (*completerFS) Complete(user string) []string {
 }
 
 func debugf(f string, a ...interface{}) {
-	l, err := os.OpenFile("/tmp/opts.debug", os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0600)
+	l, err := os.OpenFile("/tmp/wxcli.debug", os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0600)
 	if err == nil {
 		fmt.Fprintf(l, f+"\n", a...)
 		l.Close()

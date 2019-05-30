@@ -3,7 +3,7 @@ jobs:
   build:
     docker:
       - image: circleci/golang:1
-    working_directory: /go/src/github.com/jpillora/opts
+    working_directory: /go/src/github.com/wxio/wxcli
     steps:
       - checkout
       - run: go get -v -t -d ./...

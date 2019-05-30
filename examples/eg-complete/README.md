@@ -8,14 +8,14 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/jpillora/opts"
+	"github.com/wxio/wxcli"
 )
 
 type Config struct {
 	Alpha string
 	Beta  myEnum
-	Delta `opts:"mode=cmd"`
-	Echo  `opts:"mode=cmd"`
+	Delta `wxcli:"mode=cmd"`
+	Echo  `wxcli:"mode=cmd"`
 }
 
 type Delta struct {
@@ -32,7 +32,7 @@ type Echo struct {
 
 func main() {
 	c := Config{}
-	opts.New(&c).
+	wxcli.New(&c).
 		Complete().
 		Parse()
 	fmt.Printf("%+v\n", c)
@@ -130,15 +130,15 @@ If you type `-` (dash) `TAB`, you'll see available flags:
 <!--tmpl,code=plain:COMP_DEBUG= COMP_LINE="./eg-complete -" ./eg-complete -->
 ``` plain 
 --alpha
--a
---help
+--beta
+-h
 --install
+-a
+-b
+--help
 -i
 --uninstall
 -u
---beta
--b
--h
 ```
 <!--/tmpl-->
 
@@ -164,13 +164,13 @@ Sub-command completion works as expected:
 `COMP_LINE="./eg-complete delta -" ./eg-complete`
 <!--tmpl,code=plain:COMP_DEBUG= COMP_LINE="./eg-complete delta -" ./eg-complete -->
 ``` plain 
--d
---help
--h
 --zip
 -z
 --zop
 --dir
+-d
+--help
+-h
 ```
 <!--/tmpl-->
 
@@ -190,11 +190,11 @@ Uninstalled
 //completions can be tricky. You can use this `debugf` function
 //to write to a file instead of the terminal during development:
 func debugf(f string, a ...interface{}) {
-	l, err := os.OpenFile("/tmp/opts.log", os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0600)
+	l, err := os.OpenFile("/tmp/wxcli.log", os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0600)
 	if err == nil {
 		fmt.Fprintf(l, f+"\n", a...)
 		l.Close()
 	}
 }
-//then you can `tail -f /tmp/opts/log`
+//then you can `tail -f /tmp/wxcli/log`
 ```

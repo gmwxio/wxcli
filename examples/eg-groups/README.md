@@ -7,14 +7,14 @@ package main
 import (
 	"fmt"
 
-	"github.com/jpillora/opts"
+	"github.com/wxio/wxcli"
 )
 
 type Config struct {
 	Fizz       string
 	Buzz       bool
-	Foo        `opts:"group=Foo"`
-	Ping, Pong int `opts:"group=More"`
+	Foo        `wxcli:"group=Foo"`
+	Ping, Pong int `wxcli:"group=More"`
 }
 
 type Foo struct {
@@ -24,7 +24,7 @@ type Foo struct {
 
 func main() {
 	c := Config{}
-	opts.Parse(&c)
+	wxcli.Parse(&c)
 	fmt.Printf("%+v\n", c)
 }
 ```

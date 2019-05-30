@@ -3,19 +3,19 @@ package main
 import (
 	"fmt"
 
-	"github.com/jpillora/opts"
+	"github.com/wxio/wxcli"
 )
 
 type Config struct {
-	Foo string `opts:"env=FOO"`
-	Bar string `opts:"env"`
+	Foo string `wxcli:"env=FOO"`
+	Bar string `wxcli:"env"`
 }
 
 func main() {
 	c := Config{}
 	//NOTE: we could also use UseEnv(), which
 	//adds 'env' to all fields.
-	opts.New(&c).
+	wxcli.New(&c).
 		// UseEnv().
 		Parse()
 	fmt.Printf("%+v\n", c)

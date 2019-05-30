@@ -6,11 +6,11 @@ package main
 
 import (
 	"github.com/golang/glog"
-	"github.com/jpillora/opts"
+	"github.com/wxio/wxcli"
 )
 
 func main() {
-	opts.New(&app{}).
+	wxcli.New(&app{}).
 		EmbedGlobalFlagSet().
 		Complete().
 		SetLineWidth(90).
@@ -33,7 +33,7 @@ $ eg-flag-set -a
 
 <!--tmpl,code=plain:go run main.go -a -->
 ``` plain 
-I0528 14:23:54.208199   19108 main.go:21] hello from app via glog
+I0530 15:56:20.198302   21473 main.go:21] hello from app via glog
 ```
 <!--/tmpl-->
 

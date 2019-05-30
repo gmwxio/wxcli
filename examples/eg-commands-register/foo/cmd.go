@@ -3,14 +3,14 @@ package foo
 import (
 	"fmt"
 
-	"github.com/jpillora/opts"
-	"github.com/jpillora/opts-examples/eg-commands-register/bar"
+	"github.com/wxio/wxcli"
+	"github.com/wxio/wxcli-examples/eg-commands-register/bar"
 )
 
-func New() opts.SubOpts {
+func New() wxcli.SubWXCli {
 	c := cmd{}
 	//default name for a subcommand is its package name ("foo")
-	return opts.NewSub(&c).SubAddCommand(bar.New())
+	return wxcli.NewSub(&c).SubAddCommand(bar.New())
 }
 
 type cmd struct {

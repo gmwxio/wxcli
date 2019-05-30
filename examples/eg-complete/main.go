@@ -4,14 +4,14 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/jpillora/opts"
+	"github.com/wxio/wxcli"
 )
 
 type Config struct {
 	Alpha string
 	Beta  myEnum
-	Delta `opts:"mode=cmd"`
-	Echo  `opts:"mode=cmd"`
+	Delta `wxcli:"mode=cmd"`
+	Echo  `wxcli:"mode=cmd"`
 }
 
 type Delta struct {
@@ -28,7 +28,7 @@ type Echo struct {
 
 func main() {
 	c := Config{}
-	opts.New(&c).
+	wxcli.New(&c).
 		Complete().
 		Parse()
 	fmt.Printf("%+v\n", c)

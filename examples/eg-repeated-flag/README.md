@@ -7,15 +7,15 @@ package main
 import (
 	"fmt"
 
-	"github.com/jpillora/opts"
+	"github.com/wxio/wxcli"
 )
 
 func main() {
 	type config struct {
-		Files []string `opts:"help=a set of files to show"`
+		Files []string `wxcli:"help=a set of files to show"`
 	}
 	c := config{}
-	opts.Parse(&c)
+	wxcli.Parse(&c)
 	fmt.Printf("%+v\n", c)
 }
 ```

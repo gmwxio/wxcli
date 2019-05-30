@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/jpillora/opts"
+	"github.com/wxio/wxcli"
 )
 
 type Config struct {
@@ -24,7 +24,7 @@ func main() {
 		Mmm: 1,
 		IP:  net.ParseIP("1.1.1.1"),
 	}
-	opts.Parse(&c)
+	wxcli.Parse(&c)
 	fmt.Printf("%+v\n", c)
 }
 

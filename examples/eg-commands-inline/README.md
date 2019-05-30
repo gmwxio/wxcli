@@ -7,18 +7,18 @@ package main
 import (
 	"fmt"
 
-	"github.com/jpillora/opts"
+	"github.com/wxio/wxcli"
 )
 
 type Config struct {
 	//register commands by including them in the parent struct
-	Foo  `opts:"mode=cmd,help=This text also becomes commands summary text"`
-	*Bar `opts:"mode=cmd,help=command two of two"`
+	Foo  `wxcli:"mode=cmd,help=This text also becomes commands summary text"`
+	*Bar `wxcli:"mode=cmd,help=command two of two"`
 }
 
 func main() {
 	c := Config{}
-	opts.Parse(&c).Run()
+	wxcli.Parse(&c).Run()
 }
 
 type Foo struct {

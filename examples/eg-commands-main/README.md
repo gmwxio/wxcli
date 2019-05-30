@@ -1,6 +1,6 @@
 ## Commands example (main package)
 
-Here, we're using `AddCommand` to add other `Opts` instances into our root instance:
+Here, we're using `AddCommand` to add other `WXCli` instances into our root instance:
 
 <!--tmpl,code=go:cat main.go -->
 ``` go 
@@ -9,17 +9,17 @@ package main
 import (
 	"fmt"
 
-	"github.com/jpillora/opts"
+	"github.com/wxio/wxcli"
 )
 
 type Config struct{}
 
 func main() {
-	opts.New(&Config{}).
+	wxcli.New(&Config{}).
 		AddCommand(
-			opts.NewSub(&Foo{}).
+			wxcli.NewSub(&Foo{}).
 				SubAddCommand(
-					opts.NewSub(&Bar{}),
+					wxcli.NewSub(&Bar{}),
 				),
 		).
 		Parse().

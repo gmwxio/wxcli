@@ -7,7 +7,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/jpillora/opts"
+	"github.com/wxio/wxcli"
 )
 
 type Config struct {
@@ -18,8 +18,8 @@ type Config struct {
 func main() {
 	c := Config{}
 	//see default templates and the default template order
-	//in the opts/help.go file
-	o := opts.New(&c).
+	//in the wxcli/help.go file
+	o := wxcli.New(&c).
 		Summary("some text under usage").
 		DocAfter("summary", "mytext", "\nand a raw template under the summary!\n"). //add new entry
 		Repo("myfoo.com/bar").

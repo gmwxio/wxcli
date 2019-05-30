@@ -1,6 +1,6 @@
 ## Commands example (individual packages)
 
-Here, we're adding `Opts` instances from other packages into our root instance:
+Here, we're adding `WXCli` instances from other packages into our root instance:
 
 _`main.go`_
 
@@ -9,8 +9,8 @@ _`main.go`_
 package main
 
 import (
-	"github.com/jpillora/opts"
-	"github.com/jpillora/opts-examples/eg-commands-register/foo"
+	"github.com/wxio/wxcli"
+	"github.com/wxio/wxcli-examples/eg-commands-register/foo"
 )
 
 type cmd struct{}
@@ -18,7 +18,7 @@ type cmd struct{}
 func main() {
 	c := cmd{}
 	//default name for the root command (package main) is the binary name
-	opts.New(&c).
+	wxcli.New(&c).
 		AddCommand(foo.New()).
 		Parse().
 		RunFatal()
@@ -35,14 +35,14 @@ package foo
 import (
 	"fmt"
 
-	"github.com/jpillora/opts"
-	"github.com/jpillora/opts-examples/eg-commands-register/bar"
+	"github.com/wxio/wxcli"
+	"github.com/wxio/wxcli-examples/eg-commands-register/bar"
 )
 
-func New() opts.SubOpts {
+func New() wxcli.SubWXCli {
 	c := cmd{}
 	//default name for a subcommand is its package name ("foo")
-	return opts.NewSub(&c).SubAddCommand(bar.New())
+	return wxcli.NewSub(&c).SubAddCommand(bar.New())
 }
 
 type cmd struct {

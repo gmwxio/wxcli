@@ -7,17 +7,17 @@ package main
 import (
 	"fmt"
 
-	"github.com/jpillora/opts"
+	"github.com/wxio/wxcli"
 )
 
 type Config struct {
-	Shark  string   `opts:"mode=arg"`
-	Octopi []string `opts:"mode=arg,min=1"`
+	Shark  string   `wxcli:"mode=arg"`
+	Octopi []string `wxcli:"mode=arg,min=1"`
 }
 
 func main() {
 	c := Config{}
-	opts.New(&c).Parse()
+	wxcli.New(&c).Parse()
 	fmt.Printf("%+v\n", c)
 }
 ```

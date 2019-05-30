@@ -1,23 +1,23 @@
-package opts
+package wxcli
 
 import (
 	"fmt"
 	"os"
 )
 
-func (n *node) AddCommand(cmd SubOpts) Opts {
+func (n *node) AddCommand(cmd SubWXCli) WXCli {
 	sub, ok := cmd.(*node)
 	if !ok {
-		panic("another implementation of opts???")
+		panic("another implementation of wxcli???")
 	}
 	n.addCommand(sub)
 	return n
 }
 
-func (n *node) SubAddCommand(cmd SubOpts) SubOpts {
+func (n *node) SubAddCommand(cmd SubWXCli) SubWXCli {
 	sub, ok := cmd.(*node)
 	if !ok {
-		panic("another implementation of opts???")
+		panic("another implementation of wxcli???")
 	}
 	n.addCommand(sub)
 	return n

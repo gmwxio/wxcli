@@ -1,9 +1,9 @@
 package main
 
-import "github.com/jpillora/opts"
+import "github.com/wxio/wxcli"
 
 type HelpConfig struct {
-	Zip  string `opts:"mode=arg" help:"<zip> is a required arg which lorem ipsum dolor sit amet, consectetur adipiscing elit"`
+	Zip  string `wxcli:"mode=arg" help:"<zip> is a required arg which lorem ipsum dolor sit amet, consectetur adipiscing elit"`
 	Foo  string `help:"this is help for foo"`
 	Bar  int    `help:"and help for bar"`
 	Fizz string `help:"lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus at commodo odio. Sed id tincidunt purus. Cras vel felis dictum, lobortis metus a, tempus tellus, and fizz"`
@@ -16,10 +16,10 @@ func main() {
 		Foo: "42",
 	}
 
-	opts.New(&c).
+	wxcli.New(&c).
 		Name("help").
 		Summary("The help program demonstrates how to customise the help text").
 		Version("1.0.0").
-		Repo("https://github.com/jpillora/foo").
+		Repo("https://github.com/wxio/foo").
 		Parse()
 }

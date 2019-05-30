@@ -1,4 +1,4 @@
-package opts
+package wxcli
 
 import (
 	"fmt"
@@ -53,14 +53,14 @@ func TestSubCommand(t *testing.T) {
 	}
 	//config
 	type Config struct {
-		Cmd string `opts:"mode=cmdname"`
+		Cmd string `wxcli:"mode=cmdname"`
 		//command (external struct)
-		Foo FooConfig `opts:"mode=cmd"`
+		Foo FooConfig `wxcli:"mode=cmd"`
 		//command (inline struct)
 		Bar struct {
 			Zip string
 			Zap string
-		} `opts:"mode=cmd"`
+		} `wxcli:"mode=cmd"`
 	}
 	c := &Config{}
 	err := testNew(c).parse([]string{"/bin/prog", "bar", "--zip", "hello", "--zap", "world"})
@@ -164,7 +164,7 @@ func TestEnv(t *testing.T) {
 func TestLongClash(t *testing.T) {
 	type Config struct {
 		Foo string
-		Fee string `opts:"name=foo"`
+		Fee string `wxcli:"name=foo"`
 	}
 	c := &Config{}
 	//flag example parse
@@ -178,8 +178,8 @@ func TestLongClash(t *testing.T) {
 
 func TestShortClash(t *testing.T) {
 	type Config struct {
-		Foo string `opts:"short=f"`
-		Fee string `opts:"short=f"`
+		Foo string `wxcli:"short=f"`
+		Fee string `wxcli:"short=f"`
 	}
 	c := &Config{}
 	//flag example parse
@@ -193,7 +193,7 @@ func TestShortClash(t *testing.T) {
 
 func TestJSON(t *testing.T) {
 	//insert a config file
-	p := filepath.Join(os.TempDir(), "opts.json")
+	p := filepath.Join(os.TempDir(), "wxcli.json")
 	b := []byte(`{"foo":"hello", "bar":7}`)
 	if err := ioutil.WriteFile(p, b, 0755); err != nil {
 		t.Fatal(err)
@@ -218,8 +218,8 @@ func TestJSON(t *testing.T) {
 func TestArg(t *testing.T) {
 	//config
 	type Config struct {
-		Foo string `opts:"mode=arg"`
-		Zip string `opts:"mode=arg"`
+		Foo string `wxcli:"mode=arg"`
+		Zip string `wxcli:"mode=arg"`
 		Bar string
 	}
 	c := &Config{}
@@ -236,8 +236,8 @@ func TestArg(t *testing.T) {
 func TestArgs(t *testing.T) {
 	//config
 	type Config struct {
-		Zip string   `opts:"mode=arg"`
-		Foo []string `opts:"mode=arg"`
+		Zip string   `wxcli:"mode=arg"`
+		Foo []string `wxcli:"mode=arg"`
 		Bar string
 	}
 	c := &Config{}
@@ -322,7 +322,7 @@ func TestDocGroups(t *testing.T) {
 	type Config struct {
 		Fizz       string
 		Buzz       bool
-		Ping, Pong int `opts:"group=More"`
+		Ping, Pong int `wxcli:"group=More"`
 	}
 	c := &Config{}
 	//flag example parse
@@ -345,8 +345,8 @@ func TestDocGroups(t *testing.T) {
 func TestDocArgList(t *testing.T) {
 	//config
 	type Config struct {
-		Foo string   `opts:"mode=arg"`
-		Bar []string `opts:"mode=arg"`
+		Foo string   `wxcli:"mode=arg"`
+		Bar []string `wxcli:"mode=arg"`
 	}
 	c := &Config{}
 	//flag example parse

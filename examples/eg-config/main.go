@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/jpillora/opts"
+	"github.com/wxio/wxcli"
 )
 
 type Config struct {
@@ -13,7 +13,7 @@ type Config struct {
 
 func main() {
 	c := Config{}
-	opts.New(&c).
+	wxcli.New(&c).
 		ConfigPath("config.json").
 		Parse()
 	fmt.Println(c.Foo)

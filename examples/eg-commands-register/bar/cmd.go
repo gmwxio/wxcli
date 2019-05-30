@@ -3,7 +3,7 @@ package bar
 import (
 	"fmt"
 
-	"github.com/jpillora/opts"
+	"github.com/wxio/wxcli"
 )
 
 type cmd struct {
@@ -11,10 +11,10 @@ type cmd struct {
 	Zop string
 }
 
-func New() opts.SubOpts {
+func New() wxcli.SubWXCli {
 	c := cmd{}
 	//default name for a subcommand is its package name ("bar")
-	return opts.NewSub(&c)
+	return wxcli.NewSub(&c)
 }
 
 func (b *cmd) Run() error {

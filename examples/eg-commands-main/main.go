@@ -3,17 +3,17 @@ package main
 import (
 	"fmt"
 
-	"github.com/jpillora/opts"
+	"github.com/wxio/wxcli"
 )
 
 type Config struct{}
 
 func main() {
-	opts.New(&Config{}).
+	wxcli.New(&Config{}).
 		AddCommand(
-			opts.NewSub(&Foo{}).
+			wxcli.NewSub(&Foo{}).
 				SubAddCommand(
-					opts.NewSub(&Bar{}),
+					wxcli.NewSub(&Bar{}),
 				),
 		).
 		Parse().

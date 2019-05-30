@@ -1,20 +1,20 @@
-//Package opts defines a struct-tag based API for
+//Package wxcli defines a struct-tag based API for
 //rapidly building command-line interfaces. For example:
 //
 //  package main
 //
 //  import (
 //  	"log"
-//  	"github.com/jpillora/opts"
+//  	"github.com/wxio/wxcli"
 //  )
 //
 //  func main() {
 //  	type config struct {
-//  		File  string `opts:"help=file to load"`
-//  		Lines int    `opts:"help=number of lines to show"`
+//  		File  string `wxcli:"help=file to load"`
+//  		Lines int    `wxcli:"help=number of lines to show"`
 //  	}
 //  	c := config{}
-//  	opts.Parse(&c)
+//  	wxcli.Parse(&c)
 //  	log.Printf("%+v", c)
 //  }
 //
@@ -33,5 +33,5 @@
 //  $ ./my-prog -f foo.txt -l 42
 //  {File:foo.txt Lines:42}
 //
-//See https://github.com/jpillora/opts for more information and more examples.
-package opts
+//See https://github.com/wxio/wxcli for more information and more examples.
+package wxcli
