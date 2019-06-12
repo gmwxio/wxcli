@@ -15,7 +15,7 @@ func main() {
 	c := Config{}
 	wxcli.New(&c).
 		ConfigPath("config.json").
-		Parse()
+		MustParse()
 	fmt.Println(c.Foo)
 	fmt.Println(c.Bar)
 }

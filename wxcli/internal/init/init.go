@@ -134,7 +134,7 @@ func main() {
 		Complete().
 		Version(version).
 		AddCommand(initwxcli.New()).
-		Parse().
+		MustParse().
 		RunFatal()
 }
 

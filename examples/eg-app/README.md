@@ -22,7 +22,7 @@ func main() {
 		Complete().       //enable shell-completion
 		Version(version). //use version string set at compile time
 		PkgRepo().        //infer the repo URL from package and include in the help text
-		Parse().          //where the magic happens, exits with 1 on error
+		MustParse().          //where the magic happens, exits with 1 on error
 		RunFatal()        //executes App's Run method, exits with 1 on error
 }
 ```

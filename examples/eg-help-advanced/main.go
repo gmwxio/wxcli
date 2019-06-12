@@ -20,7 +20,7 @@ func main() {
 		DocAfter("summary", "mytext", "\nand a raw template under the summary!\n"). //add new entry
 		Repo("myfoo.com/bar").
 		DocSet("repo", "\nMy awesome repo:\n  {{.Repo}}"). //change existing entry
-		Parse()
+		MustParse()
 
 	fmt.Println(o.Help())
 }

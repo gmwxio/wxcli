@@ -20,7 +20,7 @@ func main() {
 	//default name for the root command (package main) is the binary name
 	wxcli.New(&c).
 		AddCommand(foo.New()).
-		Parse().
+		MustParse().
 		RunFatal()
 }
 ```

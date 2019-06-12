@@ -17,7 +17,7 @@ type Config struct {
 
 func main() {
 	c := Config{}
-	wxcli.New(&c).Parse()
+	wxcli.New(&c).MustParse()
 	fmt.Printf("%+v\n", c)
 }
 ```

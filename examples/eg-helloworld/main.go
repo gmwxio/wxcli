@@ -77,7 +77,7 @@ func main() {
 		).
 		AddCommand(wxcli.NewCmd("sub2").MustPrepare(&d{})).
 		MustPrepare(&root).
-		Parse().
+		MustParse().
 		RunFatal()
 	fmt.Printf("%+v\n", root)
 }

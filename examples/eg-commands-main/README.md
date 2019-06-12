@@ -22,7 +22,7 @@ func main() {
 					wxcli.NewSub(&Bar{}),
 				),
 		).
-		Parse().
+		MustParse().
 		Run()
 }
 

@@ -34,7 +34,7 @@ func main() {
 	c := Config{}
 	wxcli.New(&c).
 		Complete().
-		Parse()
+		MustParse()
 	fmt.Printf("%+v\n", c)
 }
 

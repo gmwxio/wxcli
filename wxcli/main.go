@@ -28,7 +28,7 @@ func main() {
 		Version(version).
 		AddCommand(initPkg.New()).
 		AddCommand(genmd.Register()).
-		Parse()
+		MustParse()
 	r.help = o.Help()
 	err := o.Run()
 	if err != nil {

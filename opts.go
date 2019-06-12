@@ -74,11 +74,12 @@ type WXCli interface {
 
 	//Parse uses os.Args to parse the internal FlagSet and
 	//returns a ParsedWXCli instance.
-	Parse() ParsedWXCli
+	Parse() (ParsedWXCli, error)
+	MustParse() ParsedWXCli
 	//ParseArgs uses a given set of args to to parse the
 	//current flags and args. Assumes the executed program is
 	//the first arg.
-	ParseArgs(args []string) ParsedWXCli
+	ParseArgs(args []string) (ParsedWXCli, error)
 }
 
 type WXCommand interface {
@@ -218,9 +219,9 @@ func NewSub(config interface{}) WXCommand {
 }
 
 //Parse is shorthand for
-//  wxcli.New(config).Parse()
+//  wxcli.New(config).MustParse()
 func Parse(config interface{}) ParsedWXCli {
-	return New(config).Parse()
+	return New(config).MustParse()
 }
 
 //Setter is any type which can be set from a string.

@@ -13,24 +13,9 @@ import (
 	"strings"
 )
 
-//Parse with os.Args
-func (n *node) Parse() ParsedWXCli {
-	return n.ParseArgs(os.Args)
-}
-
-//ParseArgs with the provided arguments
-func (n *node) ParseArgs(args []string) ParsedWXCli {
-	//shell-completion?
-	if cl := os.Getenv("COMP_LINE"); n.complete && cl != "" {
-		args := strings.Split(cl, " ")
-		n.parse(args) //ignore error
-		if ok := n.doCompletion(); !ok {
-			os.Exit(1)
-		}
-		os.Exit(0)
-	}
-	//use built state to perform parse
-	if err := n.parse(args); err != nil {
+func (n *node) MustParse() ParsedWXCli {
+	cli, err := n.ParseArgs(os.Args)
+	if err != nil {
 		//expected exit (0) print message as-is
 		if ee, ok := err.(exitError); ok {
 			fmt.Fprint(os.Stderr, string(ee))
@@ -46,8 +31,31 @@ func (n *node) ParseArgs(args []string) ParsedWXCli {
 		fmt.Fprintf(os.Stderr, n.Help())
 		os.Exit(1)
 	}
+	return cli
+}
+
+//Parse with os.Args
+func (n *node) Parse() (ParsedWXCli, error) {
+	return n.ParseArgs(os.Args)
+}
+
+//ParseArgs with the provided arguments
+func (n *node) ParseArgs(args []string) (ParsedWXCli, error) {
+	//shell-completion?
+	if cl := os.Getenv("COMP_LINE"); n.complete && cl != "" {
+		args := strings.Split(cl, " ")
+		n.parse(args) //ignore error
+		if ok := n.doCompletion(); !ok {
+			os.Exit(1)
+		}
+		os.Exit(0)
+	}
+	//use built state to perform parse
+	if err := n.parse(args); err != nil {
+		return nil, err
+	}
 	//success
-	return n
+	return n, nil
 }
 
 //parse validates and initialises all internal items

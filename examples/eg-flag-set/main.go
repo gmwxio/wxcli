@@ -10,7 +10,7 @@ func main() {
 		EmbedGlobalFlagSet().
 		Complete().
 		SetLineWidth(90).
-		Parse().
+		MustParse().
 		RunFatal()
 }
 

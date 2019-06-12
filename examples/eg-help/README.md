@@ -25,7 +25,7 @@ func main() {
 		Summary("The help program demonstrates how to customise the help text").
 		Version("1.0.0").
 		Repo("https://github.com/wxio/foo").
-		Parse()
+		MustParse()
 }
 ```
 <!--/tmpl-->

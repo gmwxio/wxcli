@@ -17,6 +17,6 @@ func main() {
 	//adds 'env' to all fields.
 	wxcli.New(&c).
 		// UseEnv().
-		Parse()
+		MustParse()
 	fmt.Printf("%+v\n", c)
 }

@@ -58,7 +58,7 @@ $ ./my-prog -f foo.txt -l 42
 - Easy to use ([eg-helloworld](https://github.com/wxio/wxcli/tree/master/examples/eg-helloworld/))
 - Promotes separation of CLI code and library code ([eg-app](https://github.com/wxio/wxcli/tree/master/examples/eg-app/))
 - Automatically generated `--help` text via struct tags ([eg-help](https://github.com/wxio/wxcli/tree/master/examples/eg-help/))
-- Default values by modifying the struct prior to `Parse()` ([eg-defaults](https://github.com/wxio/wxcli/tree/master/examples/eg-defaults/))
+- Default values by modifying the struct prior to `MustParse()` ([eg-defaults](https://github.com/wxio/wxcli/tree/master/examples/eg-defaults/))
 - Default values from a JSON config file, unmarshalled via your config struct ([eg-config](https://github.com/wxio/wxcli/tree/master/examples/eg-config/))
 - Default values from environment, defined by your field names ([eg-env](https://github.com/wxio/wxcli/tree/master/examples/eg-env/))
 - Repeated flags using slices ([eg-repeated-flag](https://github.com/wxio/wxcli/tree/master/examples/eg-repeated-flag/))
