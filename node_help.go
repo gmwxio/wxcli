@@ -157,11 +157,11 @@ func renderHelp(o *node) (string, error) {
 
 func convert(o *node) (*data, error) {
 	names := []string{}
-	curr := o
-	for curr != nil {
-		names = append([]string{curr.name}, names...)
-		curr = curr.parent
-	}
+	// curr := o
+	// for curr != nil {
+	// 	names = append([]string{curr.name}, names...)
+	// 	curr = curr.parent
+	// }
 	name := strings.Join(names, " ")
 	args := make([]*datum, len(o.args))
 	for i, arg := range o.args {
@@ -275,9 +275,9 @@ func convert(o *node) (*data, error) {
 	i := 0
 	for _, s := range o.cmds {
 		h := s.help
-		if h == "" {
-			h = s.summary
-		}
+		// if h == "" {
+		// 	h = s.summary
+		// }
 
 		subs[i] = &datum{
 			Name: s.name,

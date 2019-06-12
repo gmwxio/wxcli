@@ -1,4 +1,4 @@
-module github.com/wxio/wxcli-mdtmpl
+module github.com/wxio/wxcli-examples
 
 //replace github.com/wxio/wxcli => ../wxcli
 

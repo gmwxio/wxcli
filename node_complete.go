@@ -25,6 +25,8 @@ type Completer interface {
 	Complete(user string) []string
 }
 
+type Complete func(args string) []string
+
 //Complete enables shell-completion for this command and
 //its subcommands
 func (n *node) Complete() WXCli {
@@ -55,7 +57,7 @@ func (n *node) doCompletion() bool {
 	return complete.New(n.name, n.nodeCompletion()).Complete()
 }
 
-func (n *node) nodeCompletion() complete.Command {
+func (n *item) nodeCompletion() complete.Command {
 	//make a completion command for this node
 	c := complete.Command{
 		Sub:         complete.Commands{},

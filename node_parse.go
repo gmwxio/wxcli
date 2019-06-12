@@ -57,29 +57,29 @@ func (n *node) parse(args []string) error {
 	if n.err != nil {
 		return n.err
 	}
-	//root node? take program from the arg list (assumes os.Args format)
-	if n.parent == nil {
-		prog := ""
-		if len(args) > 0 {
-			prog = args[0]
-			args = args[1:]
-		}
-		//find default name for root-node
-		if n.item.name == "" {
-			if exe, err := os.Executable(); err == nil && exe != "" {
-				//TODO: use filepath.EvalSymlinks first?
-				_, n.item.name = path.Split(exe)
-			} else if prog != "" {
-				_, n.item.name = path.Split(prog)
-			}
-			//looks like weve been go-run, use package name?
-			if n.item.name == "main" {
-				if pkgPath := n.item.val.Type().PkgPath(); pkgPath != "" {
-					_, n.item.name = path.Split(pkgPath)
-				}
-			}
-		}
-	}
+	// //root node? take program from the arg list (assumes os.Args format)
+	// if n.parent == nil {
+	// 	prog := ""
+	// 	if len(args) > 0 {
+	// 		prog = args[0]
+	// 		args = args[1:]
+	// 	}
+	// 	//find default name for root-node
+	// 	if n.item.name == "" {
+	// 		if exe, err := os.Executable(); err == nil && exe != "" {
+	// 			//TODO: use filepath.EvalSymlinks first?
+	// 			_, n.item.name = path.Split(exe)
+	// 		} else if prog != "" {
+	// 			_, n.item.name = path.Split(prog)
+	// 		}
+	// 		//looks like weve been go-run, use package name?
+	// 		if n.item.name == "main" {
+	// 			if pkgPath := n.item.val.Type().PkgPath(); pkgPath != "" {
+	// 				_, n.item.name = path.Split(pkgPath)
+	// 			}
+	// 		}
+	// 	}
+	// }
 	//add this node and its fields (recurses if has sub-commands)
 	if err := n.addStructFields(defaultGroup, n.item.val); err != nil {
 		return err
@@ -419,10 +419,10 @@ func (n *node) addInlineCmd(name, help string, val reflect.Value) error {
 	if _, ok := n.cmds[name]; ok {
 		return n.errorf("command already exists: %s", name)
 	}
-	sub := newNode(val)
-	sub.Name(name)
+	sub := newSubnode(val)
+	sub.name = name
 	sub.help = help
-	sub.Summary(help)
+	// sub.Summary(help)
 	sub.parent = n
 	n.cmds[name] = sub
 	return nil

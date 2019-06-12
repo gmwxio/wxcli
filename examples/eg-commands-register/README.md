@@ -39,7 +39,7 @@ import (
 	"github.com/wxio/wxcli-examples/eg-commands-register/bar"
 )
 
-func New() wxcli.SubWXCli {
+func New() wxcli.WXCommand {
 	c := cmd{}
 	//default name for a subcommand is its package name ("foo")
 	return wxcli.NewSub(&c).SubAddCommand(bar.New())

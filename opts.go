@@ -10,10 +10,10 @@ import (
 //in a tree of commands. Use the AddCommand method to add subcommands (child nodes)
 //to this command instance.
 type WXCli interface {
-	//Name of the command. For the root command, Name defaults to the executable's
-	//base name. For subcommands, Name defaults to the package name, unless its the
-	//main package, then it defaults to the struct name.
-	Name(name string) WXCli
+	// //Name of the command. For the root command, Name defaults to the executable's
+	// //base name. For subcommands, Name defaults to the package name, unless its the
+	// //main package, then it defaults to the struct name.
+	// Name(name string) WXCli
 	//Version of the command. Commonly set using a package main variable at compile
 	//time using ldflags (for example, go build -ldflags -X main.version=42).
 	Version(version string) WXCli
@@ -72,8 +72,6 @@ type WXCli interface {
 	//line (excluding padding). By default, line width is 96.
 	SetLineWidth(width int) WXCli
 
-	//AddCommand adds another WXCli instance as a subcommand.
-	AddCommand(SubWXCli) WXCli
 	//Parse uses os.Args to parse the internal FlagSet and
 	//returns a ParsedWXCli instance.
 	Parse() ParsedWXCli
@@ -83,15 +81,15 @@ type WXCli interface {
 	ParseArgs(args []string) ParsedWXCli
 }
 
-type SubWXCli interface {
-	//Name of the command. For the root command, Name defaults to the executable's
-	//base name. For subcommands, Name defaults to the package name, unless its the
-	//main package, then it defaults to the struct name.
-	SubName(name string) SubWXCli
+type WXCommand interface {
+	// //Name of the command. For the root command, Name defaults to the executable's
+	// //base name. For subcommands, Name defaults to the package name, unless its the
+	// //main package, then it defaults to the struct name.
+	// SubName(name string) WXCommand
 	//Summary adds an arbitrarily long string to below the usage text
-	SubSummary(summary string) SubWXCli
+	// SubSummary(summary string) WXCommand
 	//AddCommand adds another WXCli instance as a subcommand.
-	SubAddCommand(SubWXCli) SubWXCli
+	// AddSubcommand(WXCommand) WXCommand
 }
 
 type ParsedWXCli interface {
@@ -107,18 +105,126 @@ type ParsedWXCli interface {
 	RunFatal()
 }
 
+type Config struct {
+	Path      string
+	Tag       Field
+	Default   interface{}
+	Predictor Complete
+}
+
+type Tag struct {
+	Path string
+	Tag  Field
+}
+
+type Default struct {
+	Path  string
+	Value interface{}
+}
+
+type Completion struct {
+	Path      string
+	Predictor Complete
+}
+
+func NewCLI(name string) Configurer {
+	n := &node{
+		// parent: nil,
+		//each cmd/cmd has its own set of names
+		item: item{
+			flagNames: map[string]bool{},
+			cmds:      map[string]*subnode{},
+			envNames:  map[string]bool{},
+		},
+		//these are only set at the root
+		order:     defaultOrder(),
+		templates: map[string]string{},
+		//public defaults
+		lineWidth: 96,
+		padAll:    true,
+		padWidth:  2,
+	}
+	n.name = name
+	return n
+}
+
+func NewCmd(name string) SubTagger {
+	n := &subnode{
+		parent: nil,
+		item: item{
+			//each cmd/cmd has its own set of names
+			flagNames: map[string]bool{},
+			// envNames:  map[string]bool{},
+			cmds: map[string]*subnode{},
+		},
+	}
+	n.name = name
+	return n
+}
+
+type Configurer interface {
+	// Commander
+	Tagger
+	Configure(cfgs ...Config) Commander
+}
+
+type Tagger interface {
+	Defaulter
+	Tags(tags ...Tag) Defaulter
+}
+type SubTagger interface {
+	SubDefaulter
+	Tags(tags ...Tag) SubDefaulter
+}
+
+type Defaulter interface {
+	Completers
+	Defaults(defaults ...Default) Completers
+}
+type SubDefaulter interface {
+	SubCompleters
+	Defaults(defaults ...Default) SubCompleters
+}
+
+type Completers interface {
+	Commander
+	Completions(completes ...Completion) Commander
+}
+type SubCompleters interface {
+	SubCommander
+	Completions(completes ...Completion) SubCommander
+}
+
+type Commander interface {
+	Stuffer
+	AddCommand(WXCommand) Commander
+}
+type SubCommander interface {
+	SubStuffer
+	AddSubcommand(WXCommand) SubCommander
+}
+
+type Stuffer interface {
+	Stuff(config interface{}) (WXCli, error)
+	MustStuff(config interface{}) WXCli
+}
+type SubStuffer interface {
+	Stuff(config interface{}) (SubCommander, error)
+	MustStuff(config interface{}) SubCommander
+}
+
 //New creates a new WXCli instance using the given configuration
 //struct pointer.
 func New(config interface{}) WXCli {
 	return newNode(reflect.ValueOf(config))
 }
 
-//New creates a new SubWXCli instance using the given configuration
+//New creates a new WXCommand instance using the given configuration
 //struct pointer.
-func NewSub(config interface{}) SubWXCli {
+func NewSub(config interface{}) WXCommand {
 	sub := newNode(reflect.ValueOf(config))
 	//default name should be package name,
-	//unless its in the main package, then
+	//unless its in the main packagWXCommand
 	//the default becomes the struct name
 	structType := sub.item.val.Type()
 	pkgPath := structType.PkgPath()

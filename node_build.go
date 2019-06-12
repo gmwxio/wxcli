@@ -3,6 +3,7 @@ package wxcli
 import (
 	"flag"
 	"fmt"
+	"reflect"
 )
 
 //errorf to be stored until parse-time
@@ -20,8 +21,96 @@ func (n *node) Name(name string) WXCli {
 	return n
 }
 
+func (n *node) Configure(cfgs ...Config) Commander {
+	n.cfgs = cfgs
+	return n
+}
+
+func (n *node) Tags(tags ...Tag) Defaulter {
+	n.tags = tags
+	return n
+}
+func (n *node) Completions(completes ...Completion) Commander {
+	n.completions = completes
+	return n
+}
+func (n *subnode) Completions(completes ...Completion) SubCommander {
+	n.completions = completes
+	return n
+}
+func (n *subnode) Tags(tags ...Tag) SubDefaulter {
+	n.tags = tags
+	return n
+}
+
+func (n *node) Defaults(defaults ...Default) Completers {
+	n.defaults = defaults
+	return n
+}
+func (n *subnode) Defaults(defaults ...Default) SubCompleters {
+	n.defaults = defaults
+	return n
+}
+
+// func (n *node) AddCommand(cmd WXCommand) Commander {
+// 	sub, ok := cmd.(*node)
+// 	if !ok {
+// 		panic("another implementation of wxcli???")
+// 	}
+// 	if _, exists := n.cmds[sub.name]; exists {
+// 		panic(n.errorf("cannot add command, '%s' already exists", sub.name))
+// 	}
+// 	sub.parent = n
+// 	n.cmds[sub.name] = sub
+// 	return n
+// }
+
+func (n *node) Stuff(config interface{}) (WXCli, error) {
+	val := reflect.ValueOf(config)
+	//all new node's MUST be an addressable struct
+	t := val.Type()
+	if t.Kind() == reflect.Ptr {
+		t = t.Elem()
+		val = val.Elem()
+	}
+	if !val.CanAddr() || t.Kind() != reflect.Struct {
+		return nil, n.errorf("must be an addressable to a struct")
+		// return n
+	}
+	n.item.val = val
+	return n, nil
+}
+func (n *subnode) Stuff(config interface{}) (SubCommander, error) {
+	val := reflect.ValueOf(config)
+	//all new node's MUST be an addressable struct
+	t := val.Type()
+	if t.Kind() == reflect.Ptr {
+		t = t.Elem()
+		val = val.Elem()
+	}
+	if !val.CanAddr() || t.Kind() != reflect.Struct {
+		return nil, fmt.Errorf("must be an addressable to a struct")
+		// return n
+	}
+	n.item.val = val
+	return n, nil
+}
+
+func (n *node) MustStuff(config interface{}) WXCli {
+	if _, err := n.Stuff(config); err != nil {
+		panic(err)
+	}
+	return n
+}
+func (n *subnode) MustStuff(config interface{}) SubCommander {
+	if _, err := n.Stuff(config); err != nil {
+		panic(err)
+	}
+	return n
+}
+
 //Name sets the name of the program
-func (n *node) SubName(name string) SubWXCli {
+func (n *node) SubName(name string) WXCommand {
 	n.name = name
 	return n
 }
@@ -40,7 +129,7 @@ func (n *node) Summary(summary string) WXCli {
 
 //Summary sets the text summary of the program,
 //which, by default, is inserted below the usage text
-func (n *node) SubSummary(summary string) SubWXCli {
+func (n *node) SubSummary(summary string) WXCommand {
 	n.summary = summary
 	return n
 }
@@ -159,7 +248,7 @@ func (n *node) Call(fn func(o WXCli)) WXCli {
 	return n
 }
 
-func (n *node) flagGroup(name string) *itemGroup {
+func (n *item) flagGroup(name string) *itemGroup {
 	//NOTE: the default group is the empty string
 	//get existing group
 	for _, g := range n.flagGroups {
@@ -173,7 +262,7 @@ func (n *node) flagGroup(name string) *itemGroup {
 	return g
 }
 
-func (n *node) flags() []*item {
+func (n *item) flags() []*item {
 	flags := []*item{}
 	for _, g := range n.flagGroups {
 		flags = append(flags, g.flags...)

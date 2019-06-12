@@ -22,7 +22,7 @@ type initWXCli struct {
 	Name           string `wxcli:"help=Project name or path. Defaults to current directory"`
 }
 
-func New() wxcli.SubWXCli {
+func New() wxcli.WXCommand {
 	in := &initWXCli{
 		SrcControlHost: "github.com",
 		Directory:      ".",
@@ -157,7 +157,7 @@ import (
 type initWXCli struct {
 }
 
-func New() wxcli.SubWXCli {
+func New() wxcli.WXCommand {
 	in := initWXCli{	}
 	return wxcli.NewSub(&in).SubName("init")
 }

@@ -11,7 +11,7 @@ type cmd struct {
 	Zop string
 }
 
-func New() wxcli.SubWXCli {
+func New() wxcli.WXCommand {
 	c := cmd{}
 	//default name for a subcommand is its package name ("bar")
 	return wxcli.NewSub(&c)

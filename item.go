@@ -3,6 +3,7 @@ package wxcli
 import (
 	"encoding"
 	"errors"
+	"flag"
 	"fmt"
 	"reflect"
 	"time"
@@ -34,6 +35,22 @@ type item struct {
 	noarg     bool
 	completer Completer
 	sets      int
+
+	envNames    map[string]bool
+	cfgs        []Config
+	tags        []Tag
+	completions []Completion
+	defaults    []Default
+	// parent      *node
+	flagGroups []*itemGroup
+	flagNames  map[string]bool //flag namespace covers all groups in this node
+	args       []*item
+	//external flagsets
+	flagsets []*flag.FlagSet
+	//subcommands
+	cmd     interface{}
+	cmdname *string
+	cmds    map[string]*subnode
 }
 
 func newItem(val reflect.Value) (*item, error) {

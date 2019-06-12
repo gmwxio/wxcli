@@ -16,7 +16,7 @@ type genmd struct {
 	Preview    bool
 }
 
-func Register() wxcli.SubWXCli {
+func Register() wxcli.WXCommand {
 	gen := genmd{
 		WorkingDir: ".",
 	}
