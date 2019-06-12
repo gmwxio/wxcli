@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package wxcli;
+
+option go_package = "github.com/wxio/wxcli";
+
+message Field {
+  string name = 1;
+  string help = 2;
+  oneof mode {
+    Flag mode_flag = 11;
+    Arg mode_arg = 12;
+    Embedded mode_embedded = 13;
+    Cmd mode_cmd = 14;
+    CmdName mode_cmdname = 15;
+  }
+  //
+  message Flag {
+    string short = 1;
+    string group = 2;
+    string env = 3;
+  }
+  message Arg{
+    int32 min = 1;
+    int32 max = 2;
+  }
+  message Embedded{
+    string group = 1;
+  }
+  message Cmd{}
+  message CmdName{}
+}

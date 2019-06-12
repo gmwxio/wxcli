@@ -6,10 +6,18 @@ import (
 	"github.com/wxio/wxcli"
 )
 
-type a struct{}
-type b struct{}
-type c struct{}
-type d struct{}
+type a struct {
+	X string
+}
+type b struct {
+	Y string
+}
+type c struct {
+	Z string
+}
+type d struct {
+	AA string
+}
 
 func main() {
 	type config struct {
@@ -34,43 +42,41 @@ func main() {
 				Predictor: func(args string) []string {
 					return []string{"a", "b", "c"}
 				},
-			}).
-		// Tags(
-		// 	wxcli.Tag{Path: "File", Tag: wxcli.Field{
-		// 		Name: "file",
-		// 		Help: "help text",
-		// 		Mode: &wxcli.Field_ModeFlag{
-		// 			ModeFlag: &wxcli.Field_Flag{
-		// 				Short: "f",
-		// 			},
-		// 		},
-		// 	}},
-		// 	wxcli.Tag{Path: "Lines", Tag: wxcli.Field{
-		// 		Name: "line",
-		// 		Help: "help text",
-		// 		Mode: &wxcli.Field_ModeFlag{
-		// 			ModeFlag: &wxcli.Field_Flag{
-		// 				Short: "l",
-		// 			},
-		// 		},
-		// 	}},
-		// ).
-		// Defaults(
-		// 	wxcli.Default{Path: "File", Value: "abc"},
-		// 	wxcli.Default{Path: "Lines", Value: 5},
-		// ).
-		// Completions(
-		// 	wxcli.Completion{Path: "File", Predictor: func(args string) []string {
-		// 		return []string{"a", "b", "c"}
-		// 	}},
-		// ).
-		AddCommand(wxcli.NewCmd("sub").MustStuff(&a{}).
-			AddSubcommand(wxcli.NewCmd("subsub").MustStuff(&b{}).
-				AddSubcommand(wxcli.NewCmd("subsubsub").MustStuff(&c{})),
+			},
+			wxcli.Config{
+				Path: "Lines",
+				Tag: wxcli.Field{
+					Name: "line",
+					Help: "help text",
+					Mode: &wxcli.Field_ModeFlag{
+						ModeFlag: &wxcli.Field_Flag{
+							Short: "l",
+						},
+					},
+				},
+				Default: 5,
+			},
+			wxcli.Config{
+				Path: "sub.X",
+				Tag: wxcli.Field{
+					Name: "x",
+					Help: "help text",
+					Mode: &wxcli.Field_ModeFlag{
+						ModeFlag: &wxcli.Field_Flag{
+							Short: "x",
+						},
+					},
+				},
+				Default: "abcd",
+			},
+		).
+		AddCommand(wxcli.NewCmd("sub").MustPrepare(&a{}).
+			AddSubcommand(wxcli.NewCmd("subsub").MustPrepare(&b{}).
+				AddSubcommand(wxcli.NewCmd("subsubsub").MustPrepare(&c{})),
 			),
 		).
-		AddCommand(wxcli.NewCmd("sub2").MustStuff(&d{})).
-		MustStuff(&root).
+		AddCommand(wxcli.NewCmd("sub2").MustPrepare(&d{})).
+		MustPrepare(&root).
 		Parse().
 		RunFatal()
 	fmt.Printf("%+v\n", root)

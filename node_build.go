@@ -25,30 +25,8 @@ func (n *node) Configure(cfgs ...Config) Commander {
 	n.cfgs = cfgs
 	return n
 }
-
-func (n *node) Tags(tags ...Tag) Defaulter {
-	n.tags = tags
-	return n
-}
-func (n *node) Completions(completes ...Completion) Commander {
-	n.completions = completes
-	return n
-}
-func (n *subnode) Completions(completes ...Completion) SubCommander {
-	n.completions = completes
-	return n
-}
-func (n *subnode) Tags(tags ...Tag) SubDefaulter {
-	n.tags = tags
-	return n
-}
-
-func (n *node) Defaults(defaults ...Default) Completers {
-	n.defaults = defaults
-	return n
-}
-func (n *subnode) Defaults(defaults ...Default) SubCompleters {
-	n.defaults = defaults
+func (n *subnode) Configure(cfgs ...Config) SubCommander {
+	n.cfgs = cfgs
 	return n
 }
 
@@ -65,7 +43,7 @@ func (n *subnode) Defaults(defaults ...Default) SubCompleters {
 // 	return n
 // }
 
-func (n *node) Stuff(config interface{}) (WXCli, error) {
+func (n *node) Prepare(config interface{}) (WXCli, error) {
 	val := reflect.ValueOf(config)
 	//all new node's MUST be an addressable struct
 	t := val.Type()
@@ -80,7 +58,7 @@ func (n *node) Stuff(config interface{}) (WXCli, error) {
 	n.item.val = val
 	return n, nil
 }
-func (n *subnode) Stuff(config interface{}) (SubCommander, error) {
+func (n *subnode) Prepare(config interface{}) (SubCommander, error) {
 	val := reflect.ValueOf(config)
 	//all new node's MUST be an addressable struct
 	t := val.Type()
@@ -96,14 +74,14 @@ func (n *subnode) Stuff(config interface{}) (SubCommander, error) {
 	return n, nil
 }
 
-func (n *node) MustStuff(config interface{}) WXCli {
-	if _, err := n.Stuff(config); err != nil {
+func (n *node) MustPrepare(config interface{}) WXCli {
+	if _, err := n.Prepare(config); err != nil {
 		panic(err)
 	}
 	return n
 }
-func (n *subnode) MustStuff(config interface{}) SubCommander {
-	if _, err := n.Stuff(config); err != nil {
+func (n *subnode) MustPrepare(config interface{}) SubCommander {
+	if _, err := n.Prepare(config); err != nil {
 		panic(err)
 	}
 	return n

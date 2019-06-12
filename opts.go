@@ -148,7 +148,7 @@ func NewCLI(name string) Configurer {
 	return n
 }
 
-func NewCmd(name string) SubTagger {
+func NewCmd(name string) SubConfigurer {
 	n := &subnode{
 		parent: nil,
 		item: item{
@@ -163,54 +163,32 @@ func NewCmd(name string) SubTagger {
 }
 
 type Configurer interface {
-	// Commander
-	Tagger
+	Commander
+	// Tagger
 	Configure(cfgs ...Config) Commander
 }
-
-type Tagger interface {
-	Defaulter
-	Tags(tags ...Tag) Defaulter
-}
-type SubTagger interface {
-	SubDefaulter
-	Tags(tags ...Tag) SubDefaulter
-}
-
-type Defaulter interface {
-	Completers
-	Defaults(defaults ...Default) Completers
-}
-type SubDefaulter interface {
-	SubCompleters
-	Defaults(defaults ...Default) SubCompleters
-}
-
-type Completers interface {
-	Commander
-	Completions(completes ...Completion) Commander
-}
-type SubCompleters interface {
+type SubConfigurer interface {
 	SubCommander
-	Completions(completes ...Completion) SubCommander
+	// Tagger
+	Configure(cfgs ...Config) SubCommander
 }
 
 type Commander interface {
-	Stuffer
+	Preparitory
 	AddCommand(WXCommand) Commander
 }
 type SubCommander interface {
-	SubStuffer
+	SubPreparitory
 	AddSubcommand(WXCommand) SubCommander
 }
 
-type Stuffer interface {
-	Stuff(config interface{}) (WXCli, error)
-	MustStuff(config interface{}) WXCli
+type Preparitory interface {
+	Prepare(config interface{}) (WXCli, error)
+	MustPrepare(config interface{}) WXCli
 }
-type SubStuffer interface {
-	Stuff(config interface{}) (SubCommander, error)
-	MustStuff(config interface{}) SubCommander
+type SubPreparitory interface {
+	Prepare(config interface{}) (SubCommander, error)
+	MustPrepare(config interface{}) SubCommander
 }
 
 //New creates a new WXCli instance using the given configuration
