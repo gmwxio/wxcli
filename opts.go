@@ -113,21 +113,6 @@ type Config struct {
 	Predictor Complete
 }
 
-type Tag struct {
-	Path string
-	Tag  Field
-}
-
-type Default struct {
-	Path  string
-	Value interface{}
-}
-
-type Completion struct {
-	Path      string
-	Predictor Complete
-}
-
 func NewCLI(name string) Configurer {
 	n := &node{
 		// parent: nil,
@@ -165,12 +150,10 @@ func NewCmd(name string) SubConfigurer {
 
 type Configurer interface {
 	Commander
-	// Tagger
 	Configure(cfgs ...Config) Commander
 }
 type SubConfigurer interface {
 	SubCommander
-	// Tagger
 	Configure(cfgs ...Config) SubCommander
 }
 

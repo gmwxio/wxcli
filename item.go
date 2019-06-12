@@ -36,11 +36,8 @@ type item struct {
 	completer Completer
 	sets      int
 
-	envNames    map[string]bool
-	cfgs        []Config
-	tags        []Tag
-	completions []Completion
-	defaults    []Default
+	envNames map[string]bool
+	cfgs     []Config
 	// parent      *node
 	flagGroups []*itemGroup
 	flagNames  map[string]bool //flag namespace covers all groups in this node

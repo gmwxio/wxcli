@@ -25,6 +25,9 @@ func main() {
 		Lines int    `wxcli:"help=number of lines to show"`
 	}
 	root := config{}
+
+	wxcli.NewCLI("eg-helloworld").MustPrepare(&config{}).MustParse().RunFatal()
+
 	wxcli.NewCLI("eg-helloworld").
 		Configure(
 			wxcli.Config{
